@@ -156,22 +156,28 @@ La aplicación permite cargar usuarios a través de un archivo Excel que debe cu
 
 2. **Pasos para Realizar la Carga:**
 
-   1. **Preparar el Archivo Excel:**
+   1. **Iniciar Sesión:**
+      - Antes de cargar el archivo, inicia sesión en la aplicación como administrador.
+      - Usa las siguientes credenciales para ingresar:
+         - **Email:** admin@email.com
+         - **Password:** Admin123
+
+   2. **Preparar el Archivo Excel:**
       - Crea o edita un archivo Excel con las columnas mencionadas (`name`, `rut`, `email`).
       - Asegúrate de que las filas tengan datos válidos. Las celdas vacías o datos inválidos se ignorarán durante la
         carga.
 
-   2. **Subir el Archivo:**
+   3. **Subir el Archivo:**
       - En la aplicación, haz clic en el botón **"Cargar Archivo"** (Load).
       - Selecciona tu archivo Excel y súbelo al sistema.
 
-   3. **Validación Automática:**
+   4. **Validación Automática:**
       - La aplicación procesará el archivo, cargando **solo las filas que cumplan con los siguientes criterios**:
          - El campo `name` no debe estar vacío.
          - El campo `rut` debe contener un valor válido y correctamente formado, sin puntos y con guion.
          - El campo `email` debe ser un correo electrónico en formato válido.
 
-   4. **Revisión de Resultados:**
+   5. **Revisión de Resultados:**
       - Una vez procesado el archivo, se notificará sobre el éxito o posibles errores.
       - Revisa los resultados en la interfaz después de cargar.
 
