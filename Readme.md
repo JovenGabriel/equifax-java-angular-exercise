@@ -92,6 +92,69 @@ Luego, configura los datos de conexión en el archivo de propiedades del backend
 `config.yml`, dependiendo de cómo esté implementado el backend). Indica el nombre de la base de datos (`equifax_users`),
 el usuario, y la contraseña. Asegúrate de que estos datos estén correctamente configurados.
 
+### Información Adicional: Creación Automática de Tablas y Usuario Administrador
+
+El sistema está diseñado para crear automáticamente las tablas requeridas y el usuario administrador en la base de datos
+al iniciar la aplicación por primera vez. Sin embargo, si ocurre algún problema, puedes usar el DDL (Definición de Datos
+SQL) proporcionado a continuación para realizar esta configuración manualmente.
+
+#### DDL para Creación de la Tabla `users`
+
+```postgresql
+create table users
+(
+    id         uuid         not null
+        primary key,
+    created_at timestamp(6),
+    email      varchar(255) not null
+        constraint uk6dotkott2kjsp8vw4d0m25fb7
+            unique,
+    name       varchar(255) not null,
+    password   varchar(255) not null,
+    rut        varchar(255) not null
+        constraint ukscuj1snh0iy35s195t3qff5o
+            unique,
+    token      varchar(255),
+    updated_at timestamp(6)
+);
+```
+
+Este DDL creará la tabla `users` con las restricciones necesarias.
+
+#### Inserción del Usuario Administrador
+
+Utiliza el siguiente comando SQL para crear el usuario administrador en la base de datos en caso de que no se haya
+creado automáticamente. Este usuario tiene las siguientes credenciales predeterminadas:
+
+- **Email:** admin@email.com
+- **Password:** Admin123 (almacenado en formato hash)
+
+```postgresql
+INSERT INTO users (id, created_at, email, name, password, rut, token, updated_at)
+VALUES (
+    gen_random_uuid(),  -- Genera un UUID (PostgreSQL)
+    NOW(),              -- Fecha de creación
+    'admin@email.com',  
+    'Admin',  
+    '$2a$10$XjUO6A0bVldXb8zJv5s8beROU69cnTYcXQzD0FUX5jhFMx1i8zUy2',  -- Hash de "Admin123"
+    '7769864-7',  
+    NULL,               -- Token (puede ser NULL)
+    NOW()               -- Fecha de actualización
+);
+```
+
+#### Notas Importantes:
+
+- **Creación Automática:** Si utilizas Docker Compose o ejecutas el backend directamente con Spring Boot, las tablas y
+  el usuario administrador deberían crearse automáticamente al iniciar la aplicación, siempre y cuando esté habilitada
+  la funcionalidad de inicialización de esquemas (por ejemplo, mediante `spring.jpa.hibernate.ddl-auto=create` en el
+  archivo `application.properties`).
+- **Hash de Contraseña:** La contraseña `Admin123` está previamente encriptada con BCrypt en el campo `password`.
+- Verifica que la base de datos `equifax_users` exista y que los datos de conexión estén correctamente configurados en
+  el archivo `application.properties` o el archivo de configuración correspondiente para evitar problemas durante la
+  inicialización.
+
+Si tienes problemas adicionales, puedes consultar los logs del backend o verificar el estado de la base de datos.
 ### 2. **Levantando el Backend**
 
 Desde el directorio del backend:
@@ -166,7 +229,11 @@ La aplicación permite cargar usuarios a través de un archivo Excel que debe cu
       - Crea o edita un archivo Excel con las columnas mencionadas (`name`, `rut`, `email`).
       - Asegúrate de que las filas tengan datos válidos. Las celdas vacías o datos inválidos se ignorarán durante la
         carga.
-
+        
+**Nota:** En la carpeta raíz del proyecto se encuentra un archivo de prueba llamado `test_equifax.xlsx` que puedes
+utilizar para probar la funcionalidad de carga de usuarios. Este archivo contiene datos de ejemplo que cumplen con el
+formato requerido (columnas `name`, `rut`, y `email`). Asegúrate de revisar y utilizar este archivo para validar la
+carga en la aplicación.
    3. **Subir el Archivo:**
       - En la aplicación, haz clic en el botón **"Cargar Archivo"** (Load).
       - Selecciona tu archivo Excel y súbelo al sistema.
@@ -179,7 +246,15 @@ La aplicación permite cargar usuarios a través de un archivo Excel que debe cu
 
    5. **Revisión de Resultados:**
       - Una vez procesado el archivo, se notificará sobre el éxito o posibles errores.
-      - Revisa los resultados en la interfaz después de cargar.
+      **- Revisa los resultados en la interfaz después de cargar.
+**Nota:** Si el archivo contiene errores o datos en formato incorrecto, verifica que cumpla con los requisitos antes de intentar nuevamente.
 
-**Nota:** Si el archivo contiene errores o datos en formato incorrecto, verifica que cumpla con los requisitos antes de
-intentar nuevamente.
+### Visualización de Endpoints
+La lista completa de endpoints disponibles en el backend se puede consultar a través de Swagger.
+Accede a la documentación interactiva de la API utilizando la siguiente URL:
+
+```
+http://localhost:8080/swagger-ui/index.html
+```
+
+Esto te permitirá explorar y probar los endpoints directamente desde la interfaz proporcionada por Swagger.
