@@ -1,0 +1,56 @@
+<div class="container-fluid d-flex justify-content-between align-items-center"
+     style="min-height: 10vh; margin-top: 20px;">
+    <button (click)="logout()" mat-raised-button class="btn btn-danger ms-auto">Logout</button>
+</div>
+<div class="container-fluid d-flex justify-content-center align-items-start"
+     style="min-height: 10vh; margin-top: 20px;">
+    <div class="col-lg-3 col-md-12 col-sm-12">
+        <div class="file-upload-container"
+             style="padding: 16px; border: 1px solid #5c5c5c;border-radius: 8px;min-height: 300px;">
+            <h3 class="text-center">FileUpload</h3>
+            @if (!selectedFile) {
+                <div (click)="fileInput.click()"
+                     class="my-4 drag-and-drop d-flex flex-column justify-content-center align-items-center"
+                     style="background-color: #ebebeb; padding: 20px;border-radius: 8px; border: 2px dashed #999;cursor: pointer;">
+                    <div class="text-center">clickHereToUploadFile</div>
+                    <input type="file" #fileInput accept=".csv,.xlsx" (change)="onFilesSelected($event)"
+                           style="display: none;">
+
+                </div>
+            } @else if (selectedFile) {
+                <div class="d-flex align-items-center justify-content-center" style="margin: 70px 0;">
+                    <div>{{ selectedFile.name }}</div>
+                    @if (!fileUploadResponse) {
+                        <button mat-icon-button
+                                (click)="this.selectedFile = undefined">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    }
+                </div>
+            }
+            <button (click)="uploadFile()" mat-raised-button class="w-100 dark-btn">load</button>
+        </div>
+    </div>
+</div>
+
+<hr style="margin: 20px 0;">
+
+<table *ngIf="true" class="table table-bordered mt-4">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Rut</th>
+        <th scope="col">Email</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let property of fileUploadResponse; let i = index"
+        [ngClass]="{'table-light': i % 2 === 0, 'table-dark': i % 2 !== 0}">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ property.name }}</td>
+        <td>{{ property.rut }}</td>
+        <td>{{ property.email }}</td>
+    </tr>
+    </tbody>
+</table>

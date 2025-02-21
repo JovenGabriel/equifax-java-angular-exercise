@@ -1,0 +1,32 @@
+<div class="bg-container">
+  <div class="login-form-container">
+    <div class="login-title">
+      Ingresa tu e-mail y contraseña
+    </div>
+    <form [formGroup]="loginForm" class="form-container">
+      <div class="form-container">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Email*</mat-label>
+          <input matInput type="email" formControlName="email"/>
+        </mat-form-field>
+      </div>
+      <div class="form-container">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Password*</mat-label>
+          <input matInput type="password" formControlName="password"/>
+        </mat-form-field>
+      </div>
+      <div class="login-btn-container mt-5 text-center">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="login()"
+          [disabled]="loginForm.invalid"
+          class="login-btn"
+        >
+          Log in
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
