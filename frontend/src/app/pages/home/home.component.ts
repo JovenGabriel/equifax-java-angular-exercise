@@ -48,6 +48,11 @@ export class HomeComponent {
       },
       error: error => {
         console.error('Upload failed:', error);
+        Swal.fire({
+          title: "Load Successful!",
+          text: "Error Loading Data!",
+          icon: "error"
+        })
       }
     });
   }
