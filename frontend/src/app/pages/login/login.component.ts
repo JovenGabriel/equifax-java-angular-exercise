@@ -27,9 +27,7 @@ export class LoginComponent implements OnInit{
     loginForm: FormGroup;
 
     ngOnInit() {
-        console.log('Environment API URL:', environment.apiUrl);
         if(this.loginService.isLoggedIn()) {
-            console.log('User is already logged in');
             this.router.navigate(['/home']);
         }
     }
@@ -42,12 +40,8 @@ export class LoginComponent implements OnInit{
     }
 
     login() {
-        console.log(this.loginForm.value);
-
-
         this.loginService.login(this.loginForm.value).subscribe({
             next: response => {
-                console.log('Login successful:', response);
                 // @ts-ignore
                 this.loginService.setToken(response.token);
                 Swal.fire({
@@ -60,7 +54,6 @@ export class LoginComponent implements OnInit{
 
             },
             error: error => {
-                console.error('Login failed:', error);
                 Swal.fire({
                     title: "Login Failed",
                     text: "Bad Credentials!",

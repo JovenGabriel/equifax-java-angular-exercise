@@ -32,12 +32,16 @@ export class HomeComponent {
   }
 
 
+  /**
+   * Handles file upload functionality. It sends the selected file to the upload service
+   * and processes the response or error messages accordingly. Displays alerts for success
+   * or failure of the file upload process.
+   *
+   * @return {void} This method does not return a value.
+   */
   uploadFile() {
-    console.log(this.selectedFile);
     this.uploadService.uploadFile(this.selectedFile).subscribe({
       next: response => {
-        console.log('Upload successful:', response);
-
         Swal.fire({
           title: "Load Successful!",
           text: "Data Loaded Successfully!",
@@ -47,7 +51,6 @@ export class HomeComponent {
         })
       },
       error: error => {
-        console.error('Upload failed:', error);
         Swal.fire({
           title: "Error!",
           text: "Error Loading Data!",
@@ -57,6 +60,11 @@ export class HomeComponent {
     });
   }
 
+  /**
+   * Logs the user out by invoking the logout service.
+   *
+   * @return {void} Does not return a value.
+   */
   logout() {
     this.loginService.logout();
   }
