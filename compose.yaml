@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15 # PostgreSQL
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: equifaxdb
+      POSTGRES_DB: equifax_users
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data_equifax # Data persistence
+
+  # Spring Boot Backend
+  backend:
+    build:
+      context: ./users # Folder containing the backend code
+      dockerfile: Dockerfile
+    container_name: springboot_backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/equifax_users
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: equifaxdb
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres # Ensures the backend waits for the database to initialize
+
+  # Angular Frontend
+  frontend:
+    build:
+      context: ./frontend # Folder containing the frontend code
+      dockerfile: Dockerfile
+    container_name: angular_frontend
+    ports:
+      - "4200:4200"
+
+volumes:
+  db_data:
+
