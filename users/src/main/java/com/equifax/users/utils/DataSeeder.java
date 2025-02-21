@@ -17,12 +17,12 @@ public class DataSeeder {
 
     @PostConstruct
     public void seed() {
-        if (!userRepository.existsByEmail("gabriel@gabriel.cl")) {
+        if (!userRepository.existsByEmail("admin@email.com")) {
             User admin = User.builder()
                     .name("Admin")
                     .password(passwordEncoder.encode("Admin123"))
-                    .rut("17421500-6")
-                    .email("gabriel@gabriel.cl")
+                    .rut("7769864-7")
+                    .email("admin@email.com")
                     .build();
             userRepository.save(admin);
         }
